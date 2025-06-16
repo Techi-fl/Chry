@@ -58,7 +58,6 @@
     const texto = document.getElementById('texto');
     const botoes = document.getElementById('botoes');
 
-    // 📂 Variável do caminho dos arquivos
     const CAMINHO_ASCII = './';
 
     function carregarArte(nome) {
@@ -90,7 +89,7 @@
     }
 
     function fugir() {
-      carregarArte("fim de jogo"); // ou renomeie o arquivo para 'gameover.txt'
+      carregarArte("fim de jogo"); 
       texto.textContent = "Você decidiu não se arriscar e foi embora. Fim de jogo.";
       criarBotoes([{ label: "Tentar de novo", acao: iniciar }]);
     }
