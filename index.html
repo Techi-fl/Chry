@@ -57,7 +57,6 @@
     const ascii = document.getElementById('ascii');
     const texto = document.getElementById('texto');
     const botoes = document.getElementById('botoes');
-
     const CAMINHO_ASCII = './';
 
     function carregarArte(nome) {
@@ -80,7 +79,7 @@
     }
 
     function iniciar() {
-      carregarArte("if");
+      carregarArte("carro");
       texto.textContent = "Você chegou ao IF. Está tudo silencioso e destruído.";
       criarBotoes([
         { label: "Fugir do local", acao: fugir },
@@ -89,7 +88,7 @@
     }
 
     function fugir() {
-      carregarArte("fim de jogo"); 
+      carregarArte("fim de jogo");
       texto.textContent = "Você decidiu não se arriscar e foi embora. Fim de jogo.";
       criarBotoes([{ label: "Tentar de novo", acao: iniciar }]);
     }
@@ -137,7 +136,7 @@
     }
 
     function finalFeliz() {
-      carregarArte("if");
+      carregarArte("bau");
       texto.textContent = "Você encontrou o baú. Dentro havia um bilhete:\n'O verdadeiro tesouro são os amigos que fazemos pelo caminho.'";
       criarBotoes([{ label: "Voltar ao menu", acao: iniciar }]);
     }
