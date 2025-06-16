@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Jogo Zumbi</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      background: #111;
+      color: #0f0;
+      font-family: monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    pre {
+      font-size: 16px;
+      white-space: pre;
+      background: #000;
+      padding: 10px;
+      border: 1px solid #0f0;
+      max-width: 90vw;
+      overflow-x: auto;
+    }
+
+    .btn {
+      background: #222;
+      color: #0f0;
+      border: 1px solid #0f0;
+      padding: 10px 20px;
+      margin: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .btn:hover {
+      background: #0f0;
+      color: #000;
+    }
+
+    #texto {
+      max-width: 90vw;
+      margin: 20px 0;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <pre id="ascii">Carregando arte...</pre>
+  <div id="texto">Clique para iniciar o jogo</div>
+  <div id="botoes"></div>
+
+  <script>
+    const ascii = document.getElementById('ascii');
+    const texto = document.getElementById('texto');
+    const botoes = document.getElementById('botoes');
+
+    // 📂 Variável do caminho dos arquivos
+    const CAMINHO_ASCII = './';
+
+    function carregarArte(nome) {
+      const caminho = CAMINHO_ASCII + encodeURIComponent(nome) + '.txt';
+      fetch(caminho)
+        .then(res => res.ok ? res.text() : Promise.reject("Erro ao carregar"))
+        .then(data => ascii.textContent = data)
+        .catch(() => ascii.textContent = "(Arte ASCII não encontrada)");
+    }
+
+    function criarBotoes(lista) {
+      botoes.innerHTML = '';
+      lista.forEach(({ label, acao }) => {
+        const btn = document.createElement('button');
+        btn.className = 'btn';
+        btn.textContent = label;
+        btn.onclick = acao;
+        botoes.appendChild(btn);
+      });
+    }
+
+    function iniciar() {
+      carregarArte("if");
+      texto.textContent = "Você chegou ao IF. Está tudo silencioso e destruído.";
+      criarBotoes([
+        { label: "Fugir do local", acao: fugir },
+        { label: "Investigar o local", acao: investigar }
+      ]);
+    }
+
+    function fugir() {
+      carregarArte("fim de jogo"); // ou renomeie o arquivo para 'gameover.txt'
+      texto.textContent = "Você decidiu não se arriscar e foi embora. Fim de jogo.";
+      criarBotoes([{ label: "Tentar de novo", acao: iniciar }]);
+    }
+
+    function investigar() {
+      carregarArte("zumbi");
+      texto.textContent = "Você vê um zumbi ao longe. Ele não te viu ainda.";
+      criarBotoes([
+        { label: "Enfrentar o zumbi", acao: enfrentar },
+        { label: "Ir pela esquerda", acao: esquerda },
+        { label: "Ir pela direita", acao: direita }
+      ]);
+    }
+
+    function enfrentar() {
+      carregarArte("fim de jogo");
+      texto.textContent = "Você tentou enfrentar o zumbi... mas programar seria mais fácil.";
+      criarBotoes([{ label: "Tentar de novo", acao: investigar }]);
+    }
+
+    function esquerda() {
+      carregarArte("espada");
+      texto.textContent = "Você encontrou uma espada. Deseja voltar e enfrentar o zumbi?";
+      criarBotoes([
+        { label: "Sim", acao: lutarComEspada },
+        { label: "Não", acao: armadilha }
+      ]);
+    }
+
+    function lutarComEspada() {
+      carregarArte("sobrevivente");
+      texto.textContent = "Você derrotou o zumbi. Um sobrevivente aparece e diz que pode ajudar.";
+      criarBotoes([
+        { label: "Aceitar ajuda", acao: ajuda },
+        { label: "Recusar e seguir sozinho", acao: perdido }
+      ]);
+    }
+
+    function ajuda() {
+      texto.textContent = "No caminho com o sobrevivente, surgem zumbis. O que fazer?";
+      criarBotoes([
+        { label: "Enfrentar os zumbis", acao: finalFeliz },
+        { label: "Tentar escapar silenciosamente", acao: cafe }
+      ]);
+    }
+
+    function finalFeliz() {
+      carregarArte("if");
+      texto.textContent = "Você encontrou o baú. Dentro havia um bilhete:\n'O verdadeiro tesouro são os amigos que fazemos pelo caminho.'";
+      criarBotoes([{ label: "Voltar ao menu", acao: iniciar }]);
+    }
+
+    function cafe() {
+      carregarArte("fim de jogo");
+      texto.textContent = "Você fez barulho ao beber café. Os zumbis te pegam. Fim de jogo.";
+      criarBotoes([{ label: "Tentar de novo", acao: ajuda }]);
+    }
+
+    function perdido() {
+      carregarArte("fim de jogo");
+      texto.textContent = "Você se perde sozinho no caminho. Fim de jogo.";
+      criarBotoes([{ label: "Tentar de novo", acao: lutarComEspada }]);
+    }
+
+    function armadilha() {
+      carregarArte("fim de jogo");
+      texto.textContent = "Você achou GTA VI para PS2. Era uma armadilha, tudo explode.";
+      criarBotoes([{ label: "Tentar de novo", acao: esquerda }]);
+    }
+
+    function direita() {
+      carregarArte("fim de jogo");
+      texto.textContent = "Você entrou num corredor escuro. Um programador diz:\n'Só sai daqui quem aprender Java.'";
+      criarBotoes([{ label: "Tentar de novo", acao: investigar }]);
+    }
+
+    iniciar();
+  </script>
+</body>
+</html>
